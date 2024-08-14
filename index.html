@@ -1,0 +1,412 @@
+<html><head><base href="https://www.family-life-simulator.com/"><title>Family Life Simulator: Babysitting Adventure Deluxe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+  
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 800px;
+    width: 100%;
+  }
+  h1, h2, h3 {
+    color: #00838f;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  }
+  .baby-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    background-color: #fff5e6;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  .baby-container:hover {
+    transform: scale(1.05);
+  }
+  .baby {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+  }
+  .baby-face {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background-color: #ffe4b5;
+    border-radius: 60% 60% 50% 50%;
+    margin: 0 auto;
+  }
+  .eye {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #4a4a4a;
+    border-radius: 50%;
+    top: 30px;
+  }
+  .eye-left {
+    left: 25px;
+  }
+  .eye-right {
+    right: 25px;
+  }
+  .mouth {
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background-color: #ff69b4;
+    border-radius: 0 0 20px 20px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .body {
+    width: 100px;
+    height: 80px;
+    background-color: #87ceeb;
+    border-radius: 50% 50% 0 0;
+    margin: -20px auto 0;
+  }
+  .arm {
+    position: absolute;
+    width: 30px;
+    height: 60px;
+    background-color: #ffe4b5;
+    border-radius: 15px;
+    top: 100px;
+  }
+  .arm-left {
+    left: 45px;
+    transform: rotate(20deg);
+  }
+  .arm-right {
+    right: 45px;
+    transform: rotate(-20deg);
+  }
+  .leg {
+    position: absolute;
+    width: 35px;
+    height: 70px;
+    background-color: #ffe4b5;
+    border-radius: 0 0 15px 15px;
+    bottom: 0;
+  }
+  .leg-left {
+    left: 90px;
+  }
+  .leg-right {
+    right: 90px;
+  }
+  button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #00acc1;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  button:hover {
+    background-color: #007c91;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  }
+  #stats {
+    margin-top: 20px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+    margin: 10px;
+    flex: 1;
+    min-width: 120px;
+  }
+  #baby-status {
+    margin-top: 20px;
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    margin-top: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .progress {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+  #actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  #actions button {
+    margin: 5px;
+  }
+  #message {
+    margin-top: 20px;
+    font-style: italic;
+    text-align: center;
+    color: #00838f;
+  }
+  #ending {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e1f5fe;
+    border-radius: 10px;
+    text-align: center;
+    display: none;
+  }
+  @keyframes babyBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .baby-container.happy .baby {
+    animation: babyBounce 0.6s ease infinite;
+  }
+  @keyframes babyShake {
+    0%, 100% { transform: translateX(-50%) rotate(0deg); }
+    25% { transform: translateX(-50%) rotate(-5deg); }
+    75% { transform: translateX(-50%) rotate(5deg); }
+  }
+  .baby-container.upset .baby {
+    animation: babyShake 0.3s ease infinite;
+  }
+</style>
+<script type="text/javascript" nonce="9353af7a043347729a43834c508" src="//local.adguard.org?ts=1723452792512&amp;type=content-script&amp;dmn=party.websim.ai&amp;url=https%3A%2F%2Fparty.websim.ai%2Fapi%2Fv1%2Fsites%2FVRanR4YxpvkZ3ktEF%2Fhtml%3Fraw%3Dtrue&amp;app=com.google.Chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+<script type="text/javascript" nonce="9353af7a043347729a43834c508" src="//local.adguard.org?ts=1723452792512&amp;name=AdGuard%20Assistant&amp;name=AdGuard%20Extra&amp;type=user-script"></script></head>
+<body>
+<div class="container">
+  <h1>Family Life Simulator: Babysitting Adventure Deluxe</h1>
+  <div id="baby-container" class="baby-container">
+    <div class="baby">
+      <div class="baby-face">
+        <div class="eye eye-left"></div>
+        <div class="eye eye-right"></div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+      <div class="arm arm-left"></div>
+      <div class="arm arm-right"></div>
+      <div class="leg leg-left"></div>
+      <div class="leg leg-right"></div>
+    </div>
+  </div>
+  <div id="actions">
+    <button onclick="feed()">Feed</button>
+    <button onclick="changeDiaper()">Change Diaper</button>
+    <button onclick="play()">Play</button>
+    <button onclick="putToSleep()">Put to Sleep</button>
+  </div>
+  <div id="stats">
+    <div class="stat-item">
+      <div>Hunger</div>
+      <div id="hungerLevel">100%</div>
+      <div class="progress-bar"><div id="hungerProgress" class="progress" style="width: 100%; background-color: #4caf50;"></div></div>
+    </div>
+    <div class="stat-item">
+      <div>Energy</div>
+      <div id="energyLevel">100%</div>
+      <div class="progress-bar"><div id="energyProgress" class="progress" style="width: 100%; background-color: #2196f3;"></div></div>
+    </div>
+    <div class="stat-item">
+      <div>Happiness</div>
+      <div id="happinessLevel">100%</div>
+      <div class="progress-bar"><div id="happinessProgress" class="progress" style="width: 100%; background-color: #ff9800;"></div></div>
+    </div>
+    <div class="stat-item">
+      <div>Diaper</div>
+      <div id="diaperLevel">Clean</div>
+      <div class="progress-bar"><div id="diaperProgress" class="progress" style="width: 100%; background-color: #9c27b0;"></div></div>
+    </div>
+  </div>
+  <div id="baby-status">Baby is content</div>
+  <div id="message"></div>
+  <div id="ending"></div>
+</div>
+
+<script>
+let hunger = 100;
+let energy = 100;
+let happiness = 100;
+let diaperCleanliness = 100;
+let isSleeping = false;
+let gameTime = 0;
+let gameInterval;
+
+function updateStats() {
+  document.getElementById('hungerLevel').textContent = hunger.toFixed(1) + '%';
+  document.getElementById('energyLevel').textContent = energy.toFixed(1) + '%';
+  document.getElementById('happinessLevel').textContent = happiness.toFixed(1) + '%';
+  document.getElementById('diaperLevel').textContent = diaperCleanliness > 50 ? 'Clean' : 'Dirty';
+
+  document.getElementById('hungerProgress').style.width = hunger + '%';
+  document.getElementById('energyProgress').style.width = energy + '%';
+  document.getElementById('happinessProgress').style.width = happiness + '%';
+  document.getElementById('diaperProgress').style.width = diaperCleanliness + '%';
+
+  updateBabyStatus();
+}
+
+function updateBabyStatus() {
+  const status = document.getElementById('baby-status');
+  const babyContainer = document.getElementById('baby-container');
+  babyContainer.classList.remove('happy', 'upset');
+  
+  if (isSleeping) {
+    status.textContent = "Baby is sleeping";
+    status.style.color = "#4a90e2";
+  } else if (hunger < 30 || energy < 30 || happiness < 30 || diaperCleanliness < 30) {
+    status.textContent = "Baby is upset";
+    status.style.color = "#ff4500";
+    babyContainer.classList.add('upset');
+  } else if (hunger < 60 || energy < 60 || happiness < 60 || diaperCleanliness < 60) {
+    status.textContent = "Baby needs attention";
+    status.style.color = "#ffa500";
+  } else {
+    status.textContent = "Baby is content";
+    status.style.color = "#32cd32";
+    babyContainer.classList.add('happy');
+  }
+}
+
+function feed() {
+  if (isSleeping) {
+    showMessage("The baby is sleeping. Better not wake them up!");
+    return;
+  }
+  hunger = Math.min(100, hunger + 30);
+  energy = Math.min(100, energy + 10);
+  happiness = Math.min(100, happiness + 10);
+  diaperCleanliness = Math.max(0, diaperCleanliness - 20);
+  showMessage("You fed the baby. They seem satisfied!");
+  updateStats();
+}
+
+function changeDiaper() {
+  if (isSleeping) {
+    showMessage("The baby is sleeping. Better not wake them up!");
+    return;
+  }
+  diaperCleanliness = 100;
+  happiness = Math.min(100, happiness + 20);
+  showMessage("You changed the baby's diaper. They feel fresh and clean!");
+  updateStats();
+}
+
+function play() {
+  if (isSleeping) {
+    showMessage("The baby is sleeping. Better not wake them up!");
+    return;
+  }
+  happiness = Math.min(100, happiness + 30);
+  energy = Math.max(0, energy - 20);
+  hunger = Math.max(0, hunger - 10);
+  showMessage("You played with the baby. They're having so much fun!");
+  updateStats();
+}
+
+function putToSleep() {
+  if (isSleeping) {
+    showMessage("The baby is already sleeping.");
+    return;
+  }
+  isSleeping = true;
+  energy = Math.min(100, energy + 50);
+  showMessage("You put the baby to sleep. Shh...");
+  updateStats();
+  setTimeout(() => {
+    isSleeping = false;
+    hunger = Math.max(0, hunger - 30);
+    diaperCleanliness = Math.max(0, diaperCleanliness - 30);
+    showMessage("The baby woke up!");
+    updateStats();
+  }, 10000); // Baby sleeps for 10 seconds
+}
+
+function showMessage(msg) {
+  document.getElementById('message').textContent = msg;
+}
+
+function simulateBabyNeeds() {
+  if (!isSleeping) {
+    hunger = Math.max(0, hunger - 1);
+    energy = Math.max(0, energy - 1);
+    happiness = Math.max(0, happiness - 1);
+    diaperCleanliness = Math.max(0, diaperCleanliness - 1);
+    updateStats();
+  }
+  
+  gameTime++;
+  if (gameTime >= 300) { // Game ends after 5 minutes (300 seconds)
+    endGame();
+  }
+}
+
+function endGame() {
+  clearInterval(gameInterval);
+  const endingDiv = document.getElementById('ending');
+  let endingMessage = "";
+  
+  if (hunger > 80 && energy > 80 && happiness > 80 && diaperCleanliness > 80) {
+    endingMessage = "<h2>Perfect Ending</h2><p>You're a natural! The parents are thrilled with your exceptional babysitting skills. They've offered you a permanent position as their go-to babysitter!</p>";
+  } else if (hunger > 50 && energy > 50 && happiness > 50 && diaperCleanliness > 50) {
+    endingMessage = "<h2>Good Ending</h2><p>You did a great job! The baby is happy and healthy. The parents are pleased and will likely call you again.</p>";
+  } else {
+    endingMessage = "<h2>Challenging Ending</h2><p>Babysitting is harder than it looks! The parents appreciate your effort, but suggest you might need a bit more practice. Don't give up!</p>";
+  }
+  
+  endingDiv.innerHTML = endingMessage + "<button onclick='restartGame()'>Play Again</button>";
+  endingDiv.style.display = 'block';
+}
+
+function restartGame() {
+  hunger = 100;
+  energy = 100;
+  happiness = 100;
+  diaperCleanliness = 100;
+  isSleeping = false;
+  gameTime = 0;
+  updateStats();
+  document.getElementById('ending').style.display = 'none';
+  gameInterval = setInterval(simulateBabyNeeds, 1000);
+}
+
+// Initial setup
+updateStats();
+gameInterval = setInterval(simulateBabyNeeds, 1000);
+</script>
+</body></html>
